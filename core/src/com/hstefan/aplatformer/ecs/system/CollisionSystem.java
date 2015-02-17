@@ -2,6 +2,7 @@ package com.hstefan.aplatformer.ecs.system;
 
 import com.badlogic.ashley.core.*;
 import com.badlogic.ashley.utils.ImmutableArray;
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.hstefan.aplatformer.ecs.component.CharacterComponent;
@@ -52,7 +53,7 @@ public class CollisionSystem extends EntitySystem {
             col = e.getComponent(RectCollisionComponent.class);
             rect = new Rectangle(col.rect); //copy of collider rect
             posComp = e.getComponent(PositionComponent.class);
-            pos = posComp.position;
+            pos = posComp.position.cpy();
             mov = e.getComponent(MovementComponent.class);
             rect.x += pos.x;
             rect.y += pos.y;
@@ -64,11 +65,36 @@ public class CollisionSystem extends EntitySystem {
                 otherPosComp = colEnt.getComponent(PositionComponent.class);
                 otherPos = otherPosComp.position.cpy();
                 otherRect.x += otherPos.x;
-                otherPos.y += otherPos.y;
+                otherRect.y += otherPos.y;
 
                 if (otherRect.overlaps(rect)) {
-                    characterSystem.collision(otherCol);
+                    characterSystem.collision(e, colEnt, rect, otherRect);
+                    handleCollision(e, colEnt, rect, otherRect);
+                    break; //is this a good idea?
                 }
+            }
+        }
+    }
+
+    private void handleCollision(Entity character, Entity other, Rectangle charRect, Rectangle otherRect) {
+        Rectangle intersect = new Rectangle();
+        PositionComponent charPos = character.getComponent(PositionComponent.class);
+        if (Intersector.intersectRectangles(charRect, otherRect, intersect)) {
+            if (intersect.x > charRect.x) {
+                System.out.println("Collide right");
+                charPos.position = charPos.position.cpy().sub(intersect.width + 1, 0f);
+            }
+            else if (intersect.x + intersect.width < charRect.x + charRect.width) {
+                charPos.position = charPos.position.cpy().add(intersect.width + 1, 0f);
+                System.out.println("Collide left");
+            }
+            else if (intersect.y > charRect.y) {
+                System.out.println("Collide up");
+                charPos.position = charPos.position.cpy().sub(0f, intersect.height + 1);
+            }
+            else if (intersect.y + intersect.height < charRect.y + charRect.height) {
+                charPos.position = charPos.position.cpy().add(0f, intersect.height + 1);
+                System.out.println("Collide down");
             }
         }
     }

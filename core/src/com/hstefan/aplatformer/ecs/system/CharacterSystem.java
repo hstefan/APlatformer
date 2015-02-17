@@ -4,11 +4,11 @@ import com.badlogic.ashley.core.*;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.math.Intersector;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.hstefan.aplatformer.ecs.component.CharacterComponent;
-import com.hstefan.aplatformer.ecs.component.ControllerComponent;
-import com.hstefan.aplatformer.ecs.component.MovementComponent;
-import com.hstefan.aplatformer.ecs.component.RectCollisionComponent;
+import com.hstefan.aplatformer.ecs.component.*;
+import org.w3c.dom.css.Rect;
 
 import java.util.Vector;
 
@@ -63,7 +63,6 @@ public class CharacterSystem extends EntitySystem {
         m.velocity = calcVelocity;
     }
 
-    public void collision(RectCollisionComponent rectCol) {
-        System.out.println("Collision!");
+    public void collision(Entity character, Entity other, Rectangle charRect, Rectangle otherRect) {
     }
 }

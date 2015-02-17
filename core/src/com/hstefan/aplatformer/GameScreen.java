@@ -41,7 +41,7 @@ public class GameScreen extends ScreenAdapter {
     private void createTestSprite() {
         Entity spr = new Entity();
 
-        spr.add(new PositionComponent(new Vector2(0, 0)));
+        spr.add(new PositionComponent(new Vector2(400, 400)));
         TextureRegion region = new TextureRegion();
         Texture tex = new Texture("badlogic.jpg");
         region.setTexture(tex);
