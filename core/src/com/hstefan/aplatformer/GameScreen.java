@@ -26,9 +26,10 @@ public class GameScreen extends ScreenAdapter {
     private Engine engine;
 
     public GameScreen() {
-        gameCamera = new GameCamera();
-        worldRenderer = new WorldRenderer();
         engine = new Engine();
+        gameCamera = new GameCamera();
+        worldRenderer = new WorldRenderer(engine);
+
         createTestSprite();
         createTestCharacter();
 
