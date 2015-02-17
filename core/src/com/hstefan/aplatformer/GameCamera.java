@@ -22,14 +22,14 @@ public class GameCamera {
 
     public void render(float dt) {
         float camSpeed = 1000 * dt;
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
+        /*if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
             camera.translate(-camSpeed, 0);
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT))
             camera.translate(camSpeed, 0);
         if (Gdx.input.isKeyPressed(Input.Keys.UP))
             camera.translate(0, camSpeed);
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN))
-            camera.translate(0, -camSpeed);
+            camera.translate(0, -camSpeed);*/
 
         camera.update();
     }
