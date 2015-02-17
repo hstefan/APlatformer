@@ -1,9 +1,11 @@
-package com.hstefan.aplatformer.ecs;
+package com.hstefan.aplatformer.ecs.system;
 
 import com.badlogic.ashley.core.*;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.hstefan.aplatformer.ecs.component.PositionComponent;
+import com.hstefan.aplatformer.ecs.component.VisualComponent;
 
 /**
  * Created by hstefan on 2/15/2015.
