@@ -62,7 +62,7 @@ public class GameScreen extends ScreenAdapter {
         region.setTexture(tex);
         region.setRegion(tex);
         charac.add(new VisualComponent(region));
-        charac.add(new MovementComponent(new Vector2(0f, 0f)));
+        charac.add(new MovementComponent(new Vector2(0f, 0f), new Vector2(0, -400f)));
         charac.add(new ControllerComponent());
         charac.add(new RectCollisionComponent(new Rectangle(0, 0, tex.getWidth(), tex.getHeight())));
         charac.add(new CharacterComponent());

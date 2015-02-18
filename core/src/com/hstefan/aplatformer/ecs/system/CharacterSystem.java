@@ -50,11 +50,7 @@ public class CharacterSystem extends EntitySystem {
             updateEntityController(e);
             m = e.getComponent(MovementComponent.class);
             c = e.getComponent(CharacterComponent.class);
-            /*if (!c.grounded && !c.jumping) {
-                m.velocity = m.velocity.cpy().add(new Vector2(0f, -420f));
-            }*/
             if (c.jumping) {
-                //TODO: 200f is the hardcoded jump time
                 if (TimeUtils.millis() - c.jumpTs > 300f) {
                     c.jumping = false;
                 }
@@ -62,7 +58,6 @@ public class CharacterSystem extends EntitySystem {
                     m.velocity = m.velocity.cpy().add(new Vector2(0, 900f));
                 }
             }
-            m.velocity = m.velocity.cpy().add(new Vector2(0f, -420f));
         }
     }
 
