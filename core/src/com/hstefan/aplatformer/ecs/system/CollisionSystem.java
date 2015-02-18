@@ -9,6 +9,7 @@ import com.hstefan.aplatformer.ecs.component.CharacterComponent;
 import com.hstefan.aplatformer.ecs.component.MovementComponent;
 import com.hstefan.aplatformer.ecs.component.PositionComponent;
 import com.hstefan.aplatformer.ecs.component.RectCollisionComponent;
+import com.hstefan.aplatformer.ecs.misc.CollisionSide;
 
 /**
  * Created by hstefan on 2/16/2015.
@@ -60,6 +61,9 @@ public class CollisionSystem extends EntitySystem {
 
             for (int j = 0; j < entities.size(); ++j) {
                 Entity colEnt = entities.get(j);
+                if (colEnt.getId() == e.getId()) {
+                    continue;
+                }
                 otherCol = colEnt.getComponent(RectCollisionComponent.class);
                 otherRect = new Rectangle(otherCol.rect); //copy of collider rect
                 otherPosComp = colEnt.getComponent(PositionComponent.class);
@@ -68,34 +72,35 @@ public class CollisionSystem extends EntitySystem {
                 otherRect.y += otherPos.y;
 
                 if (otherRect.overlaps(rect)) {
-                    characterSystem.collision(e, colEnt, rect, otherRect);
-                    handleCollision(e, colEnt, rect, otherRect);
-                    break; //is this a good idea?
+                    CollisionSide side = handleCollision(e, colEnt, rect, otherRect);
+                    characterSystem.collision(e, colEnt, side);
                 }
             }
         }
     }
 
-    private void handleCollision(Entity character, Entity other, Rectangle charRect, Rectangle otherRect) {
+    private CollisionSide handleCollision(Entity character, Entity other, Rectangle charRect, Rectangle otherRect) {
         Rectangle intersect = new Rectangle();
         PositionComponent charPos = character.getComponent(PositionComponent.class);
+        CollisionSide colSide = CollisionSide.None;
         if (Intersector.intersectRectangles(charRect, otherRect, intersect)) {
             if (intersect.x > charRect.x) {
-                System.out.println("Collide right");
+                colSide = CollisionSide.Right;
                 charPos.position = charPos.position.cpy().sub(intersect.width + 1, 0f);
             }
             else if (intersect.x + intersect.width < charRect.x + charRect.width) {
+                colSide = CollisionSide.Left;
                 charPos.position = charPos.position.cpy().add(intersect.width + 1, 0f);
-                System.out.println("Collide left");
             }
             else if (intersect.y > charRect.y) {
-                System.out.println("Collide up");
+                colSide = CollisionSide.Up;
                 charPos.position = charPos.position.cpy().sub(0f, intersect.height + 1);
             }
             else if (intersect.y + intersect.height < charRect.y + charRect.height) {
+                colSide = CollisionSide.Down;
                 charPos.position = charPos.position.cpy().add(0f, intersect.height + 1);
-                System.out.println("Collide down");
             }
         }
+        return colSide;
     }
 }

@@ -7,9 +7,12 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.TimeUtils;
 import com.hstefan.aplatformer.ecs.component.*;
+import com.hstefan.aplatformer.ecs.misc.CollisionSide;
 import org.w3c.dom.css.Rect;
 
+import java.security.Key;
 import java.util.Vector;
 
 /**
@@ -39,30 +42,51 @@ public class CharacterSystem extends EntitySystem {
 
     @Override
     public void update(float deltaTime) {
+        MovementComponent m = null;
+        Entity e = null;
+        CharacterComponent c;
         for (int i =0; i < entities.size(); ++i) {
-            Entity e = entities.get(i);
+            e = entities.get(i);
             updateEntityController(e);
+            m = e.getComponent(MovementComponent.class);
+            c = e.getComponent(CharacterComponent.class);
+            /*if (!c.grounded && !c.jumping) {
+                m.velocity = m.velocity.cpy().add(new Vector2(0f, -420f));
+            }*/
+            if (c.jumping) {
+                //TODO: 200f is the hardcoded jump time
+                if (TimeUtils.millis() - c.jumpTs > 300f) {
+                    c.jumping = false;
+                }
+                if (c.jumping) {
+                    m.velocity = m.velocity.cpy().add(new Vector2(0, 900f));
+                }
+            }
+            m.velocity = m.velocity.cpy().add(new Vector2(0f, -420f));
         }
     }
 
     private void updateEntityController(Entity entity) {
         MovementComponent m = entity.getComponent(MovementComponent.class);
+        CharacterComponent c = entity.getComponent(CharacterComponent.class);
         Vector2 calcVelocity = new Vector2(0f, 0f);
-        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            calcVelocity.y += 1000f;
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            calcVelocity.y -= 1000f;
+        if (Gdx.input.isKeyPressed(Input.Keys.SPACE) && c.grounded) {
+            c.jumping = true;
+            c.jumpTs = TimeUtils.millis();
+            c.grounded = false;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            calcVelocity.x -= 1000f;
+            calcVelocity.x -= 750f;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            calcVelocity.x += 1000f;
+            calcVelocity.x += 750f;
         }
         m.velocity = calcVelocity;
     }
 
-    public void collision(Entity character, Entity other, Rectangle charRect, Rectangle otherRect) {
+    public void collision(Entity character, Entity other, CollisionSide side) {
+        if (side == CollisionSide.Down) {
+            character.getComponent(CharacterComponent.class).grounded = true;
+        }
     }
 }

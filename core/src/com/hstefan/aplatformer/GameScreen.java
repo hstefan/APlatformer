@@ -55,7 +55,7 @@ public class GameScreen extends ScreenAdapter {
     private void createTestCharacter() {
         Entity charac = new Entity();
 
-        charac.add(new PositionComponent(new Vector2(120, 0)));
+        charac.add(new PositionComponent(new Vector2(120, 400)));
 
         TextureRegion region = new TextureRegion();
         Texture tex = new Texture("character.png");
