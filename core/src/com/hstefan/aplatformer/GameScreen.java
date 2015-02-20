@@ -4,16 +4,15 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.hstefan.aplatformer.ecs.component.*;
-import com.hstefan.aplatformer.ecs.system.CharacterSystem;
-import com.hstefan.aplatformer.ecs.system.CollisionSystem;
-import com.hstefan.aplatformer.ecs.system.MovementSystem;
-import com.hstefan.aplatformer.ecs.system.RenderSystem;
+import com.hstefan.aplatformer.ecs.component.debug.RectCollisionDbg;
+import com.hstefan.aplatformer.ecs.system.*;
 
 /**
  * Created by hstefan on 2/15/2015.
@@ -33,10 +32,11 @@ public class GameScreen extends ScreenAdapter {
         createTestSprite();
         createTestCharacter();
 
-        engine.addSystem(new RenderSystem(gameCamera.getCamera()));
         engine.addSystem(new MovementSystem());
         engine.addSystem(new CharacterSystem());
         engine.addSystem(new CollisionSystem());
+        engine.addSystem(new RenderSystem(gameCamera.getCamera()));
+        engine.addSystem(new DebugSystem(gameCamera.getCamera()));
     }
 
     private void createTestSprite() {
@@ -66,6 +66,7 @@ public class GameScreen extends ScreenAdapter {
         charac.add(new ControllerComponent());
         charac.add(new RectCollisionComponent(new Rectangle(0, 0, tex.getWidth(), tex.getHeight())));
         charac.add(new CharacterComponent());
+        charac.add(new RectCollisionDbg(Color.GREEN));
         engine.addEntity(charac);
     }
 
