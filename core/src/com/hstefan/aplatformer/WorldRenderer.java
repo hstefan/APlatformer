@@ -3,6 +3,7 @@ package com.hstefan.aplatformer;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
@@ -16,6 +17,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.hstefan.aplatformer.ecs.component.PositionComponent;
 import com.hstefan.aplatformer.ecs.component.RectCollisionComponent;
+import com.hstefan.aplatformer.ecs.component.debug.RectCollisionDbg;
 
 import java.util.Iterator;
 
@@ -52,6 +54,7 @@ public class WorldRenderer {
                         props.get("height", float.class)));
                 ent.add(posComp);
                 ent.add(rectComp);
+                ent.add(new RectCollisionDbg(Color.CYAN));
                 engine.addEntity(ent);
             }
         }
