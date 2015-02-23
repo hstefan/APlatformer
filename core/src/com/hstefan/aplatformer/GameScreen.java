@@ -29,7 +29,6 @@ public class GameScreen extends ScreenAdapter {
         gameCamera = new GameCamera();
         worldRenderer = new WorldRenderer(engine);
 
-        createTestSprite();
         createTestCharacter();
 
         engine.addSystem(new MovementSystem());
@@ -39,18 +38,6 @@ public class GameScreen extends ScreenAdapter {
         engine.addSystem(new DebugSystem(gameCamera.getCamera()));
     }
 
-    private void createTestSprite() {
-        Entity spr = new Entity();
-
-        spr.add(new PositionComponent(new Vector2(400, 400)));
-        TextureRegion region = new TextureRegion();
-        Texture tex = new Texture("badlogic.jpg");
-        region.setTexture(tex);
-        region.setRegion(tex);
-        spr.add(new VisualComponent(region));
-        spr.add(new RectCollisionComponent(new Rectangle(0, 0, tex.getWidth(), tex.getHeight())));
-        engine.addEntity(spr);
-    }
 
     private void createTestCharacter() {
         Entity charac = new Entity();
